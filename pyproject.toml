@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "covid19-who-situation-reports-importer"
+version = "0.1.0"
+description = ""
+authors = ["Aarohi Johal <aarohijohal@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+dateparser = "^0.7.4"
+diff-match-patch = "^20181111"
+pandas = "^1.0.3"
+requests = "^2.23.0"
+sxsdiff = "^0.3.0"
+jupyterlab = "^2.0.1"
+beautifulsoup4 = "^4.8.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
