@@ -171,8 +171,8 @@ class ParserClient():
 		else:
 			return {'request_id': request_id, 'server_response': r.text}
 
-	def get_tables_info(self):
-		return [(table.rsplit('/')[-2], table.rsplit('/')[-1]) for table in ast.literal_eval(self.get_table().columns[0])]
+	def get_tables_info(self, request_id:str=""):
+		return [(table.rsplit('/')[-2], table.rsplit('/')[-1]) for table in ast.literal_eval(self.get_table(request_id=request_id).columns[0])]
 
 	def get_table(self, request_id:str="", page=None, table=None, seperator=";", server:str="", column_names:list=None):
 		if server == "":
