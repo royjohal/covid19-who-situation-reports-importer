@@ -47,7 +47,7 @@ class ParserClient():
 	def set_current_request_id(self, request_id:str):
 		self.request_id = request_id
 
-	def send_document(self, file:str, config:str, server:str="", document_name:str=None, wait_till_finished:bool=False, refresh_period=2, save_request_id:bool=False) -> dict:
+	def send_document(self, file:str, config:str, server:str="", document_name:str=None, wait_till_finished:bool=False, refresh_period=2, save_request_id:bool=False, silent:bool=True) -> dict:
 		if server == "":
 			if self.server == "":
 				raise Exception('No server address provided')
@@ -73,7 +73,8 @@ class ParserClient():
 			print('> Polling server for the job {}...'.format(jobId))
 			server_status_response = self.get_status(jobId)['server_response']
 			while ('progress-percentage' in server_status_response):
-				print('>> Progress percentage: {}'.format(server_status_response['progress-percentage']))
+				if not silent:
+					print('>> Progress percentage: {}'.format(server_status_response['progress-percentage']))
 				time.sleep(refresh_period)
 				server_status_response = self.get_status(jobId)['server_response']
 			print('>> Job done!')

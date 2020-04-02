@@ -12,6 +12,7 @@ from pandas import concat as pdconcat
 
 from parsr_client import ParserClient
 
+
 class WHOCovidScraper(object):
 	def __init__(self, url='https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports'):
 		self.url = url
@@ -19,6 +20,7 @@ class WHOCovidScraper(object):
 
 	def get_filename_from_link(self, link:str) -> str:
 			return link.rsplit('/', 1)[-1].rsplit('?',1)[0]
+
 
 	def __get_data(self, url:str) -> DataFrame:
 			headers = default_headers()
@@ -28,6 +30,7 @@ class WHOCovidScraper(object):
 			reportid = [self.get_filename_from_link(link).rsplit('-')[2] for link in links]
 			list_of_tuples = list(zip(reportid, dates, links))
 			return DataFrame(list_of_tuples, columns = ['Report_ID', 'Date', 'Link'])
+
 
 	def download_everything(self, folder:str='./') -> dict:
 		all_files = []
@@ -42,6 +45,7 @@ class WHOCovidScraper(object):
 			else:
 					print("report {} already exists. didn't re-download".format(filename))
 		return all_files
+
 
 	def download_for_date(self, datearg:str, folder:str='./') -> dict:
 		dt = dateparse(datearg)
@@ -66,15 +70,21 @@ class WHOCovidScraper(object):
 								print("report for the date {} already exists at {}. didn't re-download".format(dt.strftime("%Y/%m/%d"), filename))
 								return {'file': filename, 'data': dt}
 
+
 	def assemble_data(self, request_id:str, parsr_url:str='localhost:3001'):
 		parsr = ParserClient(parsr_url)
 		table_info = parsr.get_tables_info(request_id)
 
-		dfs = list([parsr.get_table(request_id=request_id,page=table_info[0][0],table=table_info[0][1])])
-		columns = dfs[0].columns
-		dfs += [parsr.get_table(request_id=request_id,page=i[0],table=i[1],column_names=columns) for i in table_info[1:]]
+		dfs = []
+		columns = None
+		for table_info_i in table_info:
+			this_df = parsr.get_table(request_id=request_id,page=table_info_i[0],table=table_info_i[1],column_names=columns)
+			if type(this_df) == DataFrame:
+				columns = this_df.columns if columns is None else None
+				dfs.append(this_df)
 
 		return pdconcat(dfs, ignore_index=True)
+
 
 	def send_document_to_parsr(self, filename:str, parsr_url:str='localhost:3001', config:str='defaultConfig.json', wait_till_finished:bool=True):
 		parsr = ParserClient(parsr_url)
