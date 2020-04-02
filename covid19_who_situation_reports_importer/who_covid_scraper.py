@@ -83,7 +83,10 @@ class WHOCovidScraper(object):
 				columns = this_df.columns if columns is None else None
 				dfs.append(this_df)
 
-		return pdconcat(dfs, ignore_index=True)
+		if len(dfs) != 0:
+			return pdconcat(dfs, ignore_index=True)
+		else:
+			return None
 
 
 	def send_document_to_parsr(self, filename:str, parsr_url:str='localhost:3001', config:str='defaultConfig.json', wait_till_finished:bool=True):
