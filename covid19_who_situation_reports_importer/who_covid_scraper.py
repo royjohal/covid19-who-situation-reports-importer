@@ -71,7 +71,7 @@ class WHOCovidScraper(object):
 								return {'file': filename, 'data': dt}
 
 
-	def assemble_data(self, request_id:str, parsr_url:str='localhost:3001'):
+	def get_table_data(self, request_id:str, parsr_url:str='localhost:3001'):
 		parsr = ParserClient(parsr_url)
 		table_info = parsr.get_tables_info(request_id)
 
@@ -88,6 +88,9 @@ class WHOCovidScraper(object):
 		else:
 			return None
 
+	def get_md_data(self, request_id:str, parsr_url:str='localhost:3001'):
+		parsr = ParserClient(parsr_url)
+		return parsr.get_markdown(request_id)
 
 	def send_document_to_parsr(self, filename:str, parsr_url:str='localhost:3001', config:str='defaultConfig.json', wait_till_finished:bool=True):
 		parsr = ParserClient(parsr_url)
