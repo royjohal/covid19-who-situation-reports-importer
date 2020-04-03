@@ -15,7 +15,8 @@ New reports are added as they come.
 Requirement: [Python Poetry](https://github.com/python-poetry/poetry)
 
 	poetry install
-	poetry run python covid19_who_situation_reports_importer/download_everything.py
+	cd covid19_who_situation_reports_importer
+	poetry run python download_everything.py
 
 ## Notebook usage
 

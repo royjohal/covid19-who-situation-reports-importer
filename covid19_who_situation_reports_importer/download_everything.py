@@ -4,8 +4,8 @@ from who_covid_scraper import WHOCovidScraper
 
 def download_everything(
     url='https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports',
-    pdf_save_location='./data/pdf',
-    csv_save_location='./data/csv'
+    pdf_save_location='../data/pdf',
+    csv_save_location='../data/csv'
     ):
   scraper = WHOCovidScraper()
   downloaded_files = scraper.download_everything(folder=pdf_save_location)
